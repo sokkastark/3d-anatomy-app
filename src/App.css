@@ -1,38 +1,184 @@
-.App {
+/* --- Base HTML/Body and Main App Container (fills screen) --- */
+html, body, #root, .app-container {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%; /* Make them fill the viewport */
+  overflow: hidden; /* Prevent any scrollbars */
+  position: relative; /* Crucial for absolute positioning of children */
+  background-color: white; /* Default background */
+  font-family: sans-serif;
+  color: #333;
+}
+
+/* --- 3D Canvas (Background Layer) --- */
+canvas {
+  position: absolute; /* Positioned absolutely within .app-container */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block; /* Remove extra space below canvas */
+  z-index: 1; /* Lowest layer (background) */
+}
+
+/* --- Overlay Header --- */
+.app-header {
+  position: absolute; /* Float above the canvas */
+  top: 0;
+  left: 0;
+  width: 100%;
   text-align: center;
+  padding: 20px 0;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white header */
+  backdrop-filter: blur(5px); /* Optional: Frosted glass effect */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 10; /* Above canvas, below name tag */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-header h1 {
+  margin: 0;
+  color: #663399;
+  font-size: 2.2em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.logo {
+  position: absolute; 
+  top: 0;
+  left: 0;
+  padding: 20px 20px;
+  width: 150px;
+  height: auto;
+  margin: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.patient-details {
+  margin: 5px 0 0 0;
+  color: #555;
+  font-size: 0.9em;
+}
+
+/* --- Overlay Left Panel --- */
+.left-panel {
+  position: absolute; /* Float above the canvas */
+  top: 100px; /* Adjust based on header height */
+  left: 20px; /* Distance from left edge */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  backdrop-filter: blur(5px); /* Optional: Frosted glass effect */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10; /* Above canvas */
+  width: 250px; /* Fixed width */
+  max-height: calc(100vh - 140px); /* Fill remaining height, leaving space for header/bottom */
+  overflow-y: auto; /* Scroll if content overflows */
+  color: #333;
+}
+
+.left-panel h2 {
+  margin-top: 0;
+  color: #663399;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.left-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.left-panel li {
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  text-align: center;
+  color: #333;
+}
+
+.left-panel li:hover {
+  background-color: #dcdcdc;
+  transform: translateY(-2px);
+}
+
+.left-panel li.selected-item {
+  background-color: #007bff; /* Example highlight color */
   color: white;
+  font-weight: bold;
 }
 
-.App-link {
-  color: #61dafb;
+.left-panel .clear-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+.left-panel .clear-button:hover {
+    background-color: #5a6268;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+/* --- Overlay Right Panel --- */
+.right-panel {
+  position: absolute; /* Float above the canvas */
+  top: 110px; /* Adjust based on header height, match left panel */
+  right: 10px; /* Distance from right edge */
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  backdrop-filter: blur(5px); /* Optional: Frosted glass effect */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 10; /* Above canvas */
+  width: 160px; /* Fixed width */
+  max-height: calc(100vh - 140px); /* Fill remaining height, leaving space for header/bottom */
+  overflow-y: auto; /* Scroll if content overflows */
+  color: #333;
+}
+
+.right-panel h2 {
+  margin-top: 0;
+  color: #663399;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* --- Styling for HTML Name Tag in 3D --- */
+.name-tag {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transform: translateY(-10px); /* Lift it slightly above the point */
+    animation: fadeIn 0.3s ease-out; /* Simple fade-in */
+    z-index: 1000;
+}
+
+.name-tag-line {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 10px;
+    background-color: cyan;
+    box-shadow: 0 0 5px cyan;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(-10px); }
 }
