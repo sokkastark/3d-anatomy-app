@@ -224,7 +224,7 @@ function App() {
     }
   };
 
-  // --- Handlers for Left Panel List Clicks ---
+  /*// --- Handlers for Left Panel List Clicks ---
   const handleDiseaseListClick = (diseaseId) => {
     const selectedDisease = DISEASE_DATA.find(d => d.id === diseaseId);
     if (selectedDisease) {
@@ -248,7 +248,7 @@ function App() {
         setActiveClickPoint(null); // No name tag if no offset defined
       }
     }
-  };
+  };*/
 
   // --- Clear All Selection ---
   const clearAllSelection = () => {
